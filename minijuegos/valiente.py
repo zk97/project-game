@@ -1,6 +1,8 @@
+# BARRA EN LUGAR DE TEMPORIZADOR
 import random
 import time
 import threading
+import sys
 
 stop_threads=False
 player_time=10
@@ -9,9 +11,12 @@ def player_timer():
     tiempo=600
     while tiempo:
         mins, secs = divmod(tiempo, 60)
-        timeformat = '{:02d}:{:02d}'.format(mins, secs)
-        print(timeformat, end='\r')
-        time.sleep(.008)
+        timeformat = '{:02d}:{:02d} '.format(mins, secs)
+        if tiempo<180:
+            timeformat='     '
+        bar= timeformat+'.'*(int(2.5*mins+secs/24))+" "*(25-int(2.5*mins+secs/24))
+        print(bar,end='\r')
+        time.sleep(.0065)
         if stop_threads: 
             break
         tiempo -= 1
@@ -25,18 +30,18 @@ def player_timer():
 def cpu_time():
     intervalo=random.randint(1,20)
     if intervalo <=15:
-        respuesta=random.randint(60,119)
+        respuesta=random.randint(60,120)
     elif intervalo >19:
-        respuesta=random.randint(181,300)
+        respuesta=random.randint(30,60)
     else:
-        respuesta=random.randint(120,180)
+        respuesta=random.randint(100,150)
     mins, secs= divmod(respuesta,60)
     return mins+secs/100
 
 def stop():
     while True:
         global stop_threads
-        a=input() 
+        input() 
         stop_threads = True
         break
 
