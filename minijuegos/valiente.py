@@ -37,9 +37,8 @@ def stop():
     while True:
         global stop_threads
         a=input() 
-        if a=='':
-            stop_threads = True
-            break
+        stop_threads = True
+        break
 
 def set_player_time():
     global stop_threads
