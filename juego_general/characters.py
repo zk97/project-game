@@ -22,6 +22,7 @@ class Warrior():
         self.magic_pot=0
         self.boots=False
         self.super_pow=False
+        self.stunned=True
         self.magic_shield=True
         self.magic_staff=True
         
@@ -33,7 +34,7 @@ class Warrior():
         self.magic-=self.magic_cost
         return self.maigc_dmg
     
-    def sword_attack(self):
+    def attack(self):
         return self.attack_dmg
         
     def drink_magic():
@@ -121,9 +122,16 @@ class Warrior():
             self.magi=self.max_magic 
         
     def receive_damage(self,damage,protection):
-        if damage>protection:
-            self.healt-=(damage-protection)
+        self.healt-=(damage-protection)
             
+    def stun_change(self):
+        self.stunned = not self.stunned
+        
+    def shield_break(self):
+        self.magic_shield=False
+        
+    def move(self,options):
+        random.choice(options)
     
     
 class Goblin():
@@ -132,18 +140,15 @@ class Goblin():
         self.shield_lvl=5
         self.sword_lvl=5
         
-    def receive_damage(self,damage,move):
-        if move==1:
-            if damage>2:
-                self.health-=(damage-2)
-        else:
-            self.health-=damage
+    def receive_damage(self,damage,protection):
+        self.health-=(damage-protection) 
+        
     def attack(self):
         return 3
         
     def is_alive(self):
         return self.health>0
     #1 = attack, 0=defend
-    def move(self):
-        return random.randint(5,6)
+    def move(options):
+        return random.choice(options)
         
