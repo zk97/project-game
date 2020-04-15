@@ -1,4 +1,5 @@
-from characters import Warrior,Goblin
+from .characters import Warrior,Goblin
+import time
 
 stop_function=False
 options=[]
@@ -13,15 +14,15 @@ def fill_options(player,enemy):
     else:
         if isinstance(enemy,Goblin):
             options.append('Huir')
-        if player.magic_shiel:
+        if player.magic_shield:
             options.append('Escudo mágico')
-        if player.magic_staff and player.magic>player.magic_cost:
+        if player.magic_staff and player.magic>=player.magic_cost:
             options.append('Lanzar hechizo')
         if player.gun_lvl>0:
-            if player.bullets>0
+            if player.bullets>0:
                 options.append('Disparar')
             if player.bullets<player.max_bullets:
-                options.append('Regargar')
+                options.append('Recargar')
         if player.sword_lvl>0:
             options.append('Atacar con espada')
         if player.shield_lvl>0:
@@ -30,6 +31,7 @@ def fill_options(player,enemy):
             options.append('Hechizo prohibido')
 
 def action(player,move,enemy,enemy_move):
+    print(move,enemy_move,player.stunned)
     global stop_function
     if player.stunned:
         if enemy.stunned:
@@ -95,14 +97,18 @@ def action(player,move,enemy,enemy_move):
             player.receive_damage(enemy.spell(),0)
         elif enemy_move==3:
             enemy.receive_damage(player.spell(),0)
+            player.receive_damage(enemy.shoot(),enemy.gun_dmg)
         elif enemy_move==4:
             enemy.receive_damage(player.spell(),0)
         elif enemy_move==5:
             enemy.receive_damage(player.spell(),0)
         elif enemy_move==6:
-            enemy.receive_damage(player.spell(),5)
+            if isinstance(enemy,Goblin):
+                enemy.receive_damage(player.spell(),2)
+            else:
+                enemy.receive_damage(player.spell(),5)
         else:
-            enemy.receive_damage(30,0)
+            player.receive_damage(30,0)
             enemy.receive_damage(15,0)
             enemy.final_spell()
     elif move==3:
@@ -112,7 +118,8 @@ def action(player,move,enemy,enemy_move):
         elif enemy_move==1:
             enemy.receive_damage(player.shoot(),0)
         elif enemy_move==2:
-            player.receive_damage(enemy.shoot(),0)
+            player.receive_damage(enemy.spell(),0)
+            enemy.receive_damage(player.shoot(),player.gun_dmg)
         elif enemy_move==3:
             enemy.receive_damage(player.shoot(),0)
             player.receive_damage(enemy.shoot(),0)
@@ -122,13 +129,16 @@ def action(player,move,enemy,enemy_move):
             enemy.receive_damage(player.shoot(),0)
             player.receive_damage(enemy.attack(),0)
         elif enemy_move==6:
-            if player.gun_lvl==3:
+            if isinstance(enemy,Goblin):
+                enemy.receive_damage(player.shoot(),2)
+            elif player.gun_lvl==3:
                 enemy.receive_damage(player.shoot(),10)
             else:
                 enemy.receive_damage(player.shoot(),player.gun_dmg)
         else:
             player.receive_damage(30,0)
             enemy.receive_damage(15,0)
+            enemy.receive_damage(player.shoot(),player.gun_dmg)
             enemy.final_spell()
     elif move==4:
         if enemy.stunned:
@@ -157,6 +167,7 @@ def action(player,move,enemy,enemy_move):
         else:
             player.receive_damage(30,0)
             enemy.receive_damage(15,0)
+            enemy.final_spell()
     elif move==5:
         if enemy.stunned:
             enemy.receive_damage(player.attack(),0)
@@ -172,18 +183,24 @@ def action(player,move,enemy,enemy_move):
             enemy.receive_damage(player.attack(),0)
             enemy.recharge()
         elif enemy_move==5:
-            if player.sword_lvl==1:
+            if isinstance(enemy,Goblin):
+                enemy.receive_damage(8*player.sword_lvl-4,0)
+            elif player.sword_lvl<enemy.sword_lvl:
                 player.receive_damage(10,0)
-            elif player.sword_lvl==3:
-            enemy.receive_damage(10,0)
+            elif player.sword_lvl>enemy.sword_lvl:
+                enemy.receive_damage(10,0)
             else:
                 pass
         elif enemy_move==6:
-            enemy.receive_damage(player.attack(),player.sword_lvl*5)
+            if isinstance(enemy,Goblin):
+                enemy.receive_damage(player.attack(),2)
+            else:
+                enemy.receive_damage(player.attack(),player.sword_lvl*5)
             player.stun_change()
         else:
             player.receive_damage(30,0)
             enemy.receive_damage(15,0)
+            enemy.final_spell()
     elif move==6:
         if enemy.stunned:
             enemy.stun_change()
@@ -193,26 +210,32 @@ def action(player,move,enemy,enemy_move):
             player.receive_damage(enemy.spell(),5*(player.shield_lvl-1))
         elif enemy_move==3:
             if player.shield_lvl==1:
-            player.receive_damage(enemy.shoot(),5)
+                player.receive_damage(enemy.shoot(),5)
             else:
                 player.receive_damage(enemy.shoot(),enemy.gun_dmg)
         elif enemy_move==4:
             enemy.recharge()
             enemy.recharge()
         elif enemy_move==5:
-            player.receive_damage(enemy.attack(),player.shield_lvl*5)
-            enemy.stun_chage()
+            if enemy.attack()>player.shield_lvl*5:
+                player.receive_damage(enemy.attack(),player.shield_lvl*5)
+            else:
+                pass
+            enemy.stun_change()
         elif enemy_move==6:
             pass
         else:
             player.receive_damage(30,0)
             enemy.receive_damage(15,0)
+            enemy.final_spell()
     else:   
         if enemy_move==1:
             enemy.receive_damage(30,0)
             enemy.shield_break()
+            player.final_spell()
         else:
             enemy.receive_damage(enemy.health,0)
+            player.final_spell()
 
 def duel(player,enemy):
     global stop_function
@@ -224,28 +247,41 @@ def duel(player,enemy):
             break
         player_choice=''
         fill_options(enemy,player)
+        print(options)
         enemy_choice=enemy.move(options)
+        print(options)
         fill_options(player,enemy)
-        while player_choice not in options:
-            print('Que decides hacer?')
-            for x in options:
-                if not options.index(x)%2:
-                    print(x, end=' '*(25-len(x)))
-                else:
-                    print(x)
-            player_choice=input()
+        if player.stunned:
+            print('No puedes moverte este turno')
+            player_choice='Huir'
+        else:
+            while player_choice not in options:
+                print('Que decides hacer?')
+                for x in options:
+                    if not options.index(x)%2:
+                        print(x, end=' '*(25-len(x)))
+                    else:
+                        print(x)
+                player_choice=input()
         action(player,full_options.index(player_choice),enemy,full_options.index(enemy_choice))
-        time.sleep(3)
+        #time.sleep(3)
         if player_health>player.health:
             print('Perdiste {} de vida'.format(player_health-player.health))
+            player_health=player.health
         elif player_health<player.health:
             print('Ganaste {} de vida'.format(player.health-player_health))
+            player_health=player.health
         if enemy_health>enemy.health:
             print('El enemigo perdio {} de vida'.format(enemy_health-enemy.health))
+            enemy_health=enemy.health
         elif enemy_health<enemy.health:
             print('El enemigo gano {} de vida'.format(enemy.health-enemy_health))
+            enemy_health=enemy.health
     if player.is_alive():
         print('Venciste')
     else:
-        print('Perdiste')
+        if enemy.is_alive():
+            print('Perdiste')
+        else:
+            print('Empate')
     

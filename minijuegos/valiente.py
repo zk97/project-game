@@ -2,7 +2,6 @@
 import random
 import time
 import threading
-import sys
 
 stop_threads=False
 player_time=10
