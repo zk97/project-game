@@ -1,5 +1,6 @@
 from characters import Warrior,Goblin
 from duelos import duel
+import juego
 import sys, random, time
 sys.path.append('..')
 from minijuegos import acertijos,candado,examen,pistolero,trampas,valiente
@@ -135,14 +136,14 @@ def tutorial():
         out=''
         game=''
         while out.lower() not in ['si','no']:
-            print('¿Deseas abandonar tutorial?\nSi   No')
+            juego.slow_print('¿Deseas abandonar tutorial?\nSi   No')
             out=input()
         if out.lower()=='si':
             break
         player=Warrior(1,1,1,1)
         player.set_warrior()
         while game not in practicar:
-            print('¿Qué quieres practicar?')
+            juego.slow_print('¿Qué quieres practicar?')
             for x in practicar:
                 if practicar.index(x)%3!=2:
                     print(x,end=' '*(25-len(x)))
@@ -157,6 +158,7 @@ def tutorial():
         elif vuelta==3:
             trampas.run_trap(player)
         elif vuelta==4:
+            juego.slow_print('Frente a ti hay un duende, tiene un cuchillo en una mano y un escudo en la otra.\nSe ve dispuesto a atacar.')
             duel(player,Goblin())
         elif vuelta==5:
             pistolero.play(player)

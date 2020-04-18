@@ -36,3 +36,4 @@ I used trello to organize and wrote all my ideas about the game before coding.
 
 ## Links
 [Trello board](https://trello.com/b/zimsbcXk/juego-ironhack)
+[Flowchart](https://whimsical.com/2s84irQrspHxeoin6rvbj4)

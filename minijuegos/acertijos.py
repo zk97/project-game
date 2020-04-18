@@ -1,6 +1,7 @@
 import random
 import time
 import re
+import juego
 
 #List of riddles with answers
 a=["¿Qué ser camina con cuatro patas al alba, dos patas al mediodía y tres patas al atardecer?","hombre"]
@@ -35,38 +36,52 @@ riddles=[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
 
 def choose_riddle():
     rid = random.choice(riddles)
-    print(rid[0])
+    juego.slow_print(rid[0])
     return rid[1:]
 
-def player_guess(answer):
+def player_guess(player,answer):
     choice=False
-    while choice not in ['a','b']:
-        choice=input("a)Contestar\nb)Leer mente")
-    if choice=='b':
-        awsner=random.sample(answer,len(answer))
-        print("".join(awsner))
-    return input("¿Cuál es tu respuesta al acerijo?")
+    if player.magic>=50:
+        juego.slow_print('Por 50 de magia puedes tratar de leer la mente de la esfinge si no sabes la respuesta.')
+        while choice not in ['a','b']:
+            choice=input("a)Contestar\nb)Leer mente")
+        if choice=='b':
+            player.magic-=50
+            awsner=random.sample(answer,len(answer))
+            juego.slow_print("".join(awsner))
+    juego.slow_print("¿Cuál es tu respuesta al acerijo?")
+    return input()
 
 def play(player):
     switch=False
     op=2
     bet=0
+    juego.slow_print("¿Por qué no hacemos ésto más interesante?\nSi ganas puedo mejorar tu espada, si aún no es de nivel 3.\nPero si pierdes la cambiaré por una peor, o te daré un mordisco si no tienes una.")
     while bet not in ['1','2']:
-        bet=input("Por que no hacemos ésto más interesante?\n1)Acepto\n2)Así estoy bien")
+        bet=input("1)Aceptas la apuesta\n2)No tienes interés")
     ans=choose_riddle()
     while op>0 and not switch:
-        guess=player_guess(ans[0])
+        guess=player_guess(player,ans[0])
         for i in ans:
             if re.search(i,guess.lower()):
                 switch=True
         if not switch and op>1:
-            print('Incorrecto! Te queda sólo una oportunidad')
+            juego.slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
             time.sleep(2)
         elif not switch:
             op-=1
     if op==0:
-        print('Has perdido!')
+        juego.slow_talk('-No encontraste la respuesta al acertijo.')
+        if bet=='1':
+            if not player.sword_lvl:
+                vida=player.health
+                player.receive_damage(50,0)
+                juego.slow_print('La esfinge te suelta un mordisco que te quita {} de vida.'.format(vida-player.health))
+            else:
+                player.sword_down()           
         return 0
     else:
-        print('Es correcto')
+        juego.slow_talk('-Tu respuesta es correcta.')
+        if bet=='1':
+            player.sword_up()
         return 1

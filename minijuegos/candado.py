@@ -1,5 +1,6 @@
 import random
 import time
+import juego
 
 NUMBER=0
 ROUND=0
@@ -8,11 +9,11 @@ ROUND=0
 
 def ask_player():
     answer=-1
-    while answer not in range(0,10000) or len(list_answer)>4:
-        answer=input('Con qué número quieres tratar?')
+    while answer not in range(0,10000) or len(list_answer)!=4:
+        juego.slow_print('¿Con qué número quieres tratar?')
+        answer=input()
         list_answer=[x for x in answer]
         answer=int(answer)
-        print(list_answer)
     return answer
 
 def compare(guess,real):
@@ -37,15 +38,15 @@ def compare(guess,real):
             list_real.remove(i)
     if right_place==0:
         if wrong_place==0:
-            print("Todos los números son incorrectos.")
+            juego.slow_print("Todos los números son incorrectos.")
         else:
-            print("{} números son correctos pero están en la posición equivocada.".format(wrong_place))
+            juego.slow_print("{} números son correctos pero están en la posición equivocada.".format(wrong_place))
     else:
         if wrong_place==0:
-            print("{} números son correctos y están en el lugar correcto.".format(right_place))
+            juego.slow_print("{} números son correctos y están en el lugar correcto.".format(right_place))
         else:
-            print("{} números son correctos y están en el lugar correcto, {} números son correctos pero están en la posición equivocada.".format(right_place,wrong_place))
-    #time.sleep(2)
+            juego.slow_print("{} números son correctos y están en el lugar correcto, {} números son correctos pero están en la posición equivocada.".format(right_place,wrong_place))
+    time.sleep(2)
     
 def play(player):
     number=random.randint(0,9999)
@@ -57,21 +58,32 @@ def play(player):
         compare(player_guess,number)
         num_round+=1
     if player_guess!=number:
-        while choice not in ['1','2']:
-            choice=input('Desea sacrificar magia?\n1)Si\n2)No')
-        choice=int(choice)
-        if choice:
-            while player_guess!=number and num_round<10:
-                player_guess=ask_player()
-                compare(player_guess,number)
-                num_round+=1
+        juego.slow_print('Te quedaste si oportunidades.')
+        if player.magic>=25:
+            while choice not in ['1','2']:
+                choice=input('¿Deseas sacrificar magia para restaurar el candado?\n1)Si\n2)No')
+            choice=int(choice)
+            if choice:
+                player.magic-=25
+                while player_guess!=number and num_round<10:
+                    player_guess=ask_player()
+                    compare(player_guess,number)
+                    num_round+=1
+            else:
+                juego.slow_print("No lograste abrir el candado.")
+                player.receive_damage(15,0)
+            return 0
         else:
-            print("Perdiste")
+            juego.slow_print("No lograste abrir el candado.")
+            player.receive_damage(15,0)
             return 0
     if num_round==10:
-        print("Perdiste!")
+        juego.slow_print("No lograste descifrar la combinación.")
+        player.receive_damage(15,0)
         return 0
     else:
-        print("Ganaste!")
+        juego.slow_print("El candado se abre y puedes cruzar.")
+        if num_round<7:
+            player.receive_damage(0,20)
         return 1
         

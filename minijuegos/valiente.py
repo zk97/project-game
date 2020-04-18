@@ -2,6 +2,7 @@
 import random
 import time
 import threading
+import juego
 
 stop_threads=False
 player_time=10
@@ -21,7 +22,8 @@ def player_timer():
         tiempo -= 1
     global player_time
     if tiempo==0:
-        print('BAM! Es un golpe crítico')
+        juego.scream('¡BAM!')
+        juego.slow_print('Es un golpe crítico')
         player_time=0
     else:
         player_time=mins+secs/100
@@ -52,6 +54,7 @@ def set_player_time():
     t1.start()
     t2.start()
     t1.join()
+    t2.join()
 
 def play(player):
     p_time=10
@@ -62,14 +65,21 @@ def play(player):
         p_time=player_time
         c_time=cpu_time()
         if p_time==c_time:
-            print("El jugador paró con {:.2f} segundos restantes.\nEl campeón paró con {:.2f} segundos restantes.\n Es un empate! Listos para el desempate.".format(p_time,c_time))
-            time.sleep(5)
+            juego.slow_print("El jugador paró con {:.2f} segundos restantes.\nEl campeón paró con {:.2f} segundos restantes.\n Es un empate! Listos para el desempate.".format(p_time,c_time))
+            time.sleep(4)
     if p_time==0:
-        print("Tal vez necesitas tus ojos más de lo que creías. Te han reventado la cabeza.")
+        vida = player.health
+        player.receive_damage(15,0)
+        juego.slow_talk("-Tal vez necesitas tus ojos más de lo que creías. Te reventaste la cabeza.\nY me quedo con tu escudo.")
+        juego.slow_print("Pierdes {} de vida.".format(vida-player.health))
+        player.shield_down()
         return 0
     elif p_time<c_time:
-        print("Haz ganado, tus sentidos no te engañan.\nParaste con {:.2f} segundos restantes\nAquel cobarde tenía {:.2f} segundos restantes.".format(p_time,c_time))  
+        print('')
+        juego.slow_print("Has ganado, tus sentidos no te engañan.\nParaste con {:.2f} segundos restantes.\nAquel cobarde tenía {:.2f} segundos restantes.".format(p_time,c_time))
+        player.shield_up()
         return 1
     else:
-        print("Tal vez necesitas tus ojos más de lo que creías.\nTe has acobardado, aun te restaban {:.2f} segundos. Tu rival paro con tan solo {:.2f} segundos restantes.".format(p_time,c_time))
-        return 0
+        juego.slow_print("Tal vez necesitas tus ojos más de lo que creías.\nTe has acobardado, aun te restaban {:.2f} segundos. Tu rival paro con tan solo {:.2f} segundos restantes.".format(p_time,c_time))
+        juego.slow_talk('-Gracias por tu escudo camarada')
+        player.shield_down()

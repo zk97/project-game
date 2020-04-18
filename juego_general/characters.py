@@ -55,7 +55,6 @@ class Warrior():
         self.bullets+=1
         if self.bullets>self.max_bullets:
             self.bullets=self.max_bullets
-        print(self.bullets)
             
     def sword_up(self):
         if self.sword_lvl<3:
@@ -71,6 +70,7 @@ class Warrior():
         if self.gun_lvl<3:
             self.gun_lvl+=1
             self.set_gun_dmg()
+            self.set_max_bullets()
         
     def gun_down(self):
         if self.gun_lvl>0:
@@ -136,6 +136,8 @@ class Warrior():
         self.health-=(damage-protection)
         if self.health>self.max_health:
             self.health=self.max_health
+        if self.health<0:
+            self.health=0
      
     def is_alive(self):
         return self.health>0

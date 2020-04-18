@@ -1,5 +1,6 @@
 import time
 import random
+import juego
 
 turn=5
 group=1
@@ -68,22 +69,66 @@ def play(player):
             ask=get_question(q5)[0]
         mix_choice()
         ordered_options=sorted([choice[i]+ask[i+1] for i in range(4)])
-        print('{}.-{}'.format(6-turn,ask[0]),end='\r')
-        time.sleep(2)
+        juego.slow_print('{}.-{}'.format(6-turn,ask[0]))
+        time.sleep(1)
         for x in ordered_options:
             print(x,end='\r')
         while player_choice not in choice:
             player_choice=input()+')'
         if player_choice==choice[0]:
-            print('Correcto!')
+            juego.slow_print('Respuesta correcta.')
             group+=1
         else:
-            print('Incorrecto')
+            juego.scream('Incorrecto')
         turn-=1
-    print('Tiviste {} respuestas correctas'.format(group-1))
+    juego.slow_print('Tiviste {} respuestas correctas'.format(group-1))
     if group>4:
+        if group>5:
+            juego.slow_talk('-Me pusiste de buen humor, mejoraré todos tus objetos')
+            player.shield_up()
+            player.sword_up()
+            player.gun_up()
+        else:
+            juego.slow_talk('Casi logras tener 5 respuestas correctas. ¿Qué objeto quieres que mejore para ti?')
+            cosas=[]
+            if player.sword_lvl<3:
+                cosas.append('Espada')
+            if player.gun_lvl<3:
+                cosas.append('Revolver')
+            if player.shield_lvl<3:
+                cosas.append('Escudo')
+            if not len(cosas):
+                cosas.append('Nada')
+            cosa=''
+            while cosa not in cosas:
+                for x in cosas:
+                    print(x, end='    ')
+                cosa=input().capitalize()
+            if cosa=='Espada':
+                player.sword_up()
+            elif cosa=='Revolver':
+                player.gun_up()
+            elif cosa=='Escudo':
+                player.shield_up()
+            else:
+                juego.slow_talk('-Veo que ya tienes todo mejorado al máximo, tal vez para la otra.')
         return 1
     else:
+        if group>1:
+            vida = player.health
+            player.receive_damage(20,0)
+            juego.slow_talk('-Me haces enfurecer con tu poco conocimiento.')
+            juego.slow_print('Te dispara una flecha al estomago.\nPierdes {} de vida.'.format(vida-player.health))
+            if player.magic>=30:
+                player.magic-=30
+            else:
+                player.magic=0
+        else:
+            juego.slow_talk('-Eres tan inculto que pierdes todos tus objetos.')
+            for _ in range(3):
+                player.shield_down()
+                player.sword_down()
+                player.gun_down()
         return 0
         
     
