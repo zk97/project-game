@@ -17,6 +17,7 @@ class Warrior():
         self.magic_dmg=0
         self.sword_dmg=0
         self.bullets=0
+        self.money=0
         self.exp=0
         self.life_pot=0
         self.magic_pot=0
@@ -25,6 +26,7 @@ class Warrior():
         self.stunned=False
         self.magic_shield=True
         self.magic_staff=True
+        self.location=[0,0]
         
     def shoot(self):
         self.bullets-=1
@@ -76,7 +78,7 @@ class Warrior():
             self.set_gun_dmg()
             self.set_max_bullets()
         
-    def shiel_up(self):
+    def shield_up(self):
         if self.shield_lvl<3:
             self.shield_lvl+=1
         
@@ -106,7 +108,7 @@ class Warrior():
         self.gun_dmg=self.gun_lvl*5
         
     def set_sword_dmg(self):
-        if self.sword_lvl==0:
+        if not self.sword_lvl:
             self.sword_dmg=0
         else:
             self.sword_dmg=10*self.sword_lvl-5
@@ -159,7 +161,64 @@ class Warrior():
         
     def move(self,options):
         return random.choice(options)
-  
+    
+    def win_money(self,money):
+        self.money+=money
+        
+    def buy_pot(self,price,pot_type):
+        if self.money>=price:
+            if pot_type=='health':
+                self.life_pot+=1
+                self.money-=price
+            elif pot_type=='magic':
+                self.magic_pot+=1
+                self.money-=price
+        else:
+            print('Dinero insuficiente')
+    
+    def buy_gun(self,price):
+        if self.money>=price:
+            self.gun_up()
+            self.money-=price
+        else:
+            print('Dinero insuficiente')
+    
+    def buy_sword(self,price):
+        if self.money>=price:
+            self.sword_up()
+            self.money-=price
+        else:
+            print('Dinero insuficiente')
+            
+    def buy_shield(self,price):
+        if self.money>=price:
+            self.shield_up()
+            self.money-=price
+        else:
+            print('Dinero insuficiente')
+    
+    def set_warrior(self):
+        self.set_gun_dmg()
+        self.set_magic_cost()
+        self.set_magic_dmg()
+        self.set_max_bullets()
+        self.set_sword_dmg()
+        
+    def find_money(self):
+        print('2 de oro')
+        self.money+=2
+    
+    def find_bag(self):
+        self.money+=15
+    
+    def find_pot(self):
+        kind=random.randint(0,1)
+        if not kind:
+            print('Vida')
+            self.life_pot+=1
+        else:
+            print('Magica')
+            self.magic_pot+=1
     
     
 class Goblin():

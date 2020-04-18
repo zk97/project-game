@@ -29,9 +29,9 @@ def player_timer():
 def cpu_time():
     intervalo=random.randint(1,20)
     if intervalo <=15:
-        respuesta=random.randint(60,120)
+        respuesta=random.randint(40,100)
     elif intervalo >19:
-        respuesta=random.randint(30,60)
+        respuesta=random.randint(10,40)
     else:
         respuesta=random.randint(100,150)
     mins, secs= divmod(respuesta,60)
@@ -53,7 +53,7 @@ def set_player_time():
     t2.start()
     t1.join()
 
-def brave_dumb():
+def play(player):
     p_time=10
     c_time=10
     while p_time==c_time:
@@ -66,7 +66,10 @@ def brave_dumb():
             time.sleep(5)
     if p_time==0:
         print("Tal vez necesitas tus ojos más de lo que creías. Te han reventado la cabeza.")
+        return 0
     elif p_time<c_time:
         print("Haz ganado, tus sentidos no te engañan.\nParaste con {:.2f} segundos restantes\nAquel cobarde tenía {:.2f} segundos restantes.".format(p_time,c_time))  
+        return 1
     else:
         print("Tal vez necesitas tus ojos más de lo que creías.\nTe has acobardado, aun te restaban {:.2f} segundos. Tu rival paro con tan solo {:.2f} segundos restantes.".format(p_time,c_time))
+        return 0

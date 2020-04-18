@@ -24,7 +24,7 @@ def count_space():
             stop_threads= True
             break
         if switch:
-            print(30-counter)
+            print(25-counter)
             break
             
 def goblins():
@@ -44,7 +44,7 @@ def goblins():
         run=False
     print(mins+secs/100)
         
-def run_trap():
+def run_trap(player):
     global stop_threads
     global switch
     global run
@@ -57,6 +57,9 @@ def run_trap():
     t1.start()
     t2.start()
     t2.join()
+    t1.join()
+    print('Alto')
+    time.sleep(2)
     if run:
         print('\nSobreviviste a la trampa')
     else:
@@ -75,51 +78,55 @@ def dodge_trap():
         if arrow==2:
             print(arrows[arrow])
             print(arrows[4])
-            time.sleep(1.5)
+            time.sleep(1)
             if move!='s':
                 print(move)
                 damage+=1
         elif arrow==3:
             print(arrows[4])
             print(arrows[arrow])
-            time.sleep(1.5)
+            time.sleep(1)
             if move!='w':
                 print(move)
                 damage+=1
         elif arrow==1:
             print(arrows[arrow])
-            time.sleep(1.5)
+            time.sleep(1)
             if move != "a":
                 print(move)
                 damage+=1
         else:
             print(arrows[arrow])
-            time.sleep(1.5)
+            time.sleep(1)
             if move != "d":
                 print(move)
                 damage+=1
         rounds-=1
+    global switch
     switch=True
         
 def player_moves():
-    while not switch:
+    while True:
         global move
         move=input()
+        if switch:
+            break
         
-def arrow_trap():
+def arrow_trap(player):
     global switch
     switch=False
     t1 = threading.Thread(target=player_moves)
     t2 = threading.Thread(target=dodge_trap)
-
     t1.start()
     t2.start()
     t2.join()
+    print('Presiona enter para continuar')
+    t1.join()
     print("Te pegaron {} flechas!".format(damage))
     
 # Decide!
 
-def voice_trap():
+def voice_trap(player):
     choice=False
     while choice not in ['1','2']:
         choice = input('Decide\n1)Continua tu camino\n2)Acepta el riesgo')

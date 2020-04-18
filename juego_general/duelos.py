@@ -1,9 +1,9 @@
-from .characters import Warrior,Goblin
+from characters import Warrior,Goblin
 import time
 
 stop_function=False
 options=[]
-full_options=['Huir','Escudo mágico','Lanzar hechizo','Disparar','Recargar','Atacar con espada','Usar escudo','Hechizo prohibido']
+full_options=['huir','escudo mágico','lanzar hechizo','disparar','recargar','atacar con espada','usar escudo','hechizo prohibido']
 
 def fill_options(player,enemy):
     global options
@@ -39,7 +39,7 @@ def action(player,move,enemy,enemy_move):
         elif enemy_move==1:
             enemy.charge_shield()
         elif enemy_move==2:
-            playe.receive_damage(enemy.spell(),0)
+            player.receive_damage(enemy.spell(),0)
         elif enemy_move==3:
             player.receive_damage(enemy.shoot(),0)
         elif enemy_move==4:
@@ -91,7 +91,7 @@ def action(player,move,enemy,enemy_move):
             enemy.stun_change()
         elif enemy_move==1:
             enemy.charge_shield()
-            enemy.receive_damage(player.spell(),20)
+            enemy.receive_damage(player.spell(),(enemy.magic_lvl**2)*5)
         elif enemy_move==2:
             enemy.receive_damage(player.spell(),0)
             player.receive_damage(enemy.spell(),0)
@@ -106,7 +106,7 @@ def action(player,move,enemy,enemy_move):
             if isinstance(enemy,Goblin):
                 enemy.receive_damage(player.spell(),2)
             else:
-                enemy.receive_damage(player.spell(),5)
+                enemy.receive_damage(player.spell(),enemy.shield_lvl**2)
         else:
             player.receive_damage(30,0)
             enemy.receive_damage(15,0)
@@ -131,8 +131,8 @@ def action(player,move,enemy,enemy_move):
         elif enemy_move==6:
             if isinstance(enemy,Goblin):
                 enemy.receive_damage(player.shoot(),2)
-            elif player.gun_lvl==3:
-                enemy.receive_damage(player.shoot(),10)
+            elif player.gun_lvl>enemy.shield_lvl:
+                enemy.receive_damage(player.shoot(),5*enemy.shield_lvl)
             else:
                 enemy.receive_damage(player.shoot(),player.gun_dmg)
         else:
@@ -194,8 +194,10 @@ def action(player,move,enemy,enemy_move):
         elif enemy_move==6:
             if isinstance(enemy,Goblin):
                 enemy.receive_damage(player.attack(),2)
+            elif player.attack()>enemy.shield_lvl*5:
+                enemy.receive_damage(player.attack(),enemy.shield_lvl*5)
             else:
-                enemy.receive_damage(player.attack(),player.sword_lvl*5)
+                pass
             player.stun_change()
         else:
             player.receive_damage(30,0)
@@ -207,10 +209,10 @@ def action(player,move,enemy,enemy_move):
         elif enemy_move==1:
             enemy.charge_shield()
         elif enemy_move==2:
-            player.receive_damage(enemy.spell(),5*(player.shield_lvl-1))
+            player.receive_damage(enemy.spell(),player.shield_lvl**2)
         elif enemy_move==3:
-            if player.shield_lvl==1:
-                player.receive_damage(enemy.shoot(),5)
+            if enemy.gun_lvl>player.shield_lvl:
+                player.receive_damage(enemy.shoot(),5*player.shield_lvl)
             else:
                 player.receive_damage(enemy.shoot(),enemy.gun_dmg)
         elif enemy_move==4:
@@ -240,6 +242,10 @@ def action(player,move,enemy,enemy_move):
 def duel(player,enemy):
     global stop_function
     stop_function=False
+    if isinstance(enemy,Warrior):
+        enemy.set_warrior()
+        if enemy.magic_lvl>=2:
+            enemy.super_power()
     player_health=player.health
     enemy_health=enemy.health
     while player.is_alive() and enemy.is_alive():
@@ -255,7 +261,7 @@ def duel(player,enemy):
             print('No puedes moverte este turno')
             player_choice='Huir'
         else:
-            while player_choice not in options:
+            while player_choice.lower() not in [x.lower() for x in options]:
                 print('Que decides hacer?')
                 for x in options:
                     if not options.index(x)%2:
@@ -263,7 +269,7 @@ def duel(player,enemy):
                     else:
                         print(x)
                 player_choice=input()
-        action(player,full_options.index(player_choice),enemy,full_options.index(enemy_choice))
+        action(player,full_options.index(player_choice.lower()),enemy,full_options.index(enemy_choice.lower()))
         #time.sleep(3)
         if player_health>player.health:
             print('Perdiste {} de vida'.format(player_health-player.health))
@@ -279,9 +285,12 @@ def duel(player,enemy):
             enemy_health=enemy.health
     if player.is_alive():
         print('Venciste')
+        return 1
     else:
         if enemy.is_alive():
             print('Perdiste')
+            return 0
         else:
             print('Empate')
+            return 2
     

@@ -16,27 +16,27 @@ def fill_q():
     global q1,q2,q3,q4,q5
 
     q1=[]
-    question1=open('minijuegos/preg1.txt','r',encoding='utf8')
+    question1=open('../minijuegos/preg1.txt','r',encoding='utf8')
     for _ in range(0,41):
         q1.append([question1.readline() for _ in range(1,6)])
 
     q2=[]
-    question2=open('minijuegos/preg2.txt','r',encoding='utf8')
+    question2=open('../minijuegos/preg2.txt','r',encoding='utf8')
     for _ in range(0,42):
         q2.append([question2.readline() for _ in range(1,6)])
 
     q3=[]
-    question3=open('minijuegos/preg3.txt','r',encoding='utf8')
+    question3=open('../minijuegos/preg3.txt','r',encoding='utf8')
     for _ in range(0,45):
         q3.append([question3.readline() for _ in range(1,6)])
 
     q4=[]
-    question4=open('minijuegos/preg4.txt','r',encoding='utf8')
+    question4=open('../minijuegos/preg4.txt','r',encoding='utf8')
     for _ in range(0,42):
         q4.append([question4.readline() for _ in range(1,6)])
 
     q5=[]
-    question5=open('minijuegos/preg5.txt','r',encoding='utf8')
+    question5=open('../minijuegos/preg5.txt','r',encoding='utf8')
     for _ in range(0,39):
         q5.append([question5.readline() for _ in range(1,6)])
         
@@ -48,7 +48,7 @@ def mix_choice():
 def get_question(grp):
     return random.sample(grp,1)
     
-def exam():
+def play(player):
     global group,turn
     group=1
     turn=5
@@ -81,5 +81,9 @@ def exam():
             print('Incorrecto')
         turn-=1
     print('Tiviste {} respuestas correctas'.format(group-1))
+    if group>4:
+        return 1
+    else:
+        return 0
         
     

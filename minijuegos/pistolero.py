@@ -26,19 +26,22 @@ class Player:
         time.sleep(2)
         play_move=0
         if self.bullets==0:
-            while play_move not in [1,3]:
-                play_move=int(input(TEXT_EMPTY))
-                if play_move==2:
-                    play_move+=1
+            while play_move not in ['1','3']:
+                play_move=input(TEXT_EMPTY)
+                if play_move=='2':
+                    play_move='3'
             
         elif self.bullets==self.max:
-            while play_move not in [2,3]:
-                play_move=int(input(TEXT_FULL))
-                play_move+=1
+            while play_move not in ['2','3']:
+                play_move=input(TEXT_FULL)
+                if play_move=='1':
+                    playe_move='2'
+                elif play_move=='2':
+                    play_move='3'
         else:
-            while play_move not in [1,2,3]:
-                play_move=int(input(TEXT))
-        return play_move
+            while play_move not in ['1','2','3']:
+                play_move=input(TEXT)
+        return int(play_move)
     
     def cpu_choose_move(self):
         if self.bullets==0:
@@ -48,7 +51,9 @@ class Player:
         else:
             return random.randint(1,3)
         
-def simulate_duel(player,cpu):
+def play(player_1):
+    player=Player()
+    cpu=Player()
     C_WINS=0
     P_WINS=0
     game_round=0
@@ -86,7 +91,7 @@ def simulate_duel(player,cpu):
                     cpu.hp-=1
                     a=[1,2,3]
                     a.remove(cpu_first)
-                    cpu_firs=random.choice(a)
+                    cpu_first=random.choice(a)
                     print("BANG! Agarras a tu enemigo tratando de recargar y das en el blanco")
                     P_WINS+=1
                     print("'No puedo creer que me diste!!'")
@@ -111,5 +116,7 @@ def simulate_duel(player,cpu):
         game_round+=1
     if P_WINS==2:
         print('Player wins')
+        return 1
     else:
         print('Player looses')
+        return 0

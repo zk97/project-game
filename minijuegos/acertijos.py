@@ -11,7 +11,7 @@ d=["Devora todas las cosas\nAves, bestias, plantas y flores\nRoe el hierro, muer
 e=["Cuando iba a St. Ives\nConocí a un hombre con siete esposas\nCada esposa tenía siete sacos\nCada saco tenía siete gatos\nCada gato tenía siete gatitos\nGatitos, gatos, sacos, y esposas\n¿Cuántos iban a St. Ives?","uno"]
 f=["Canta sin voz, vuela sin alas, sin dientes muerde, sin boca habla.","viento"]
 g=["Aliméntame y viviré\nDame agua y moriré\n¿Quién soy?","fuego"]
-h=["Siempre estoy entre la tierra y el cielo\nSuelo estar a distancia\Si intentas acercarte me alejaré","horizonte"]
+h=["Siempre estoy entre la tierra y el cielo\nSuelo estar a distancia\nSi intentas acercarte me alejaré","horizonte"]
 i=["Sin luz no existo pero si me mira me muero. ¿Quién soy?","sombra"]
 j=["En una mesa hay tres sombreros negros y dos blancos. Tres señores en fila india se ponen un sombrero al azar cada uno y sin mirar el color.\nSe le pregunta al tercero de la fila, que puede ver el color del sombrero del segundo y el primero, si puede decir el color de su sombrero, a lo que responde negativamente.\nSe le pregunta al segundo que ve solo el sombrero del primero y tampoco puede responder a la pregunta.\nPor ultimo el primero de la fila que no ve ningún sombrero responde acertadamente de que color es el sombrero que tenia puesto.\n¿Cuál es este color?","negro"]
 k=["Un oso camina 10 Km. hacia el sur, 10 hacia el este y 10 hacia el norte, volviendo al punto del que partio. ¿De que color es el oso?","blanco"]
@@ -47,10 +47,12 @@ def player_guess(answer):
         print("".join(awsner))
     return input("¿Cuál es tu respuesta al acerijo?")
 
-def riddle_me_this():
+def play(player):
     switch=False
     op=2
-    bet=input("Por que no hacemos ésto más interesante?\n1)Acepto\n2)Así estoy bien")
+    bet=0
+    while bet not in ['1','2']:
+        bet=input("Por que no hacemos ésto más interesante?\n1)Acepto\n2)Así estoy bien")
     ans=choose_riddle()
     while op>0 and not switch:
         guess=player_guess(ans[0])
@@ -60,8 +62,11 @@ def riddle_me_this():
         if not switch and op>1:
             print('Incorrecto! Te queda sólo una oportunidad')
             time.sleep(2)
-        op-=1
+        elif not switch:
+            op-=1
     if op==0:
         print('Has perdido!')
+        return 0
     else:
         print('Es correcto')
+        return 1
