@@ -130,7 +130,7 @@ def coliseum(player):
     player.magic=past_magic
         
 def tutorial():
-    practicar=['Decisiones','Esquivar','Escapar','Pelear','Pistolero','Candado','Acertijos','Valiente','Examen']
+    practicar=['Esquivar','Escapar','Pelear','Pistolero','Candado','Acertijos','Valiente','Examen']
     while True:
         vuelta=0
         out=''
@@ -152,24 +152,49 @@ def tutorial():
             game=input().capitalize()
         vuelta=practicar.index(game)+1
         if vuelta==1:
-            trampas.voice_trap(player)
+            juego.slow_print('Usa a,s,d,w para moverte cuando veas <,v,>,^ respectivamente.\n Presiona enter para comenzar.')
+            input()
+            trampas.arrow_trap(player,0)
         elif vuelta==2:
-            trampas.arrow_trap(player)
+            juego.slow_print('Presiona barra espaciadora seguido de enter para correr tan rápido como puedas, trata de llegar a la meta antes de que se termine tu tiempo.\nPresiona enter para comenzar.')
+            input()
+            trampas.run_trap(player,0)
         elif vuelta==3:
-            trampas.run_trap(player)
+            juego.slow_print('Escribe el comando que deseas usar de entre las opciones disponibles para pelear.\nPara una explicación de cada comando escribe "help", o presiona enter para comenzar.')
+            ayuda='ayuda'
+            while ayuda not in ['','help']:
+                ayuda=input().lower()
+            if ayuda == 'help':
+                juego.slow_print('Huir: Tratas de huir de la pelea, hay una posibilidad de fallar.\nEscudo mágico: Te protege se los hechizos y te permite cargar magia si no es interrumpido con un ataque físico.\nLanzar hechizo: Vence cualquier tipo de ataque físico, consume magia.\nDisparar: Ataque a distancia, necesita tener balas cargadas.\nRecargar: Carga hasta 2 balas si no es interrumpido por el rival.\nAtacar con espada: Ataque cuerpo a cuerpo: Ataque con espada, no es tan veloz pero es confiable.\nUsar escudo: cubre de ataques físicos, mitigando daño y aturdiendo si te atacan con espada.\nPresiona enter para comenzar.')
+            input()
+            costal=''
+            while costal not in ['duende','humano']:
+                juego.slow_print('¿Contra qué quieres practicar esta vez?\nDuende    Humano')
+                costal=input().lower()
+            if costal=='duende':
+                duel(player,Goblin())
+            else:
+                duel(player,Warrior(1,1,1,1))
         elif vuelta==4:
-            juego.slow_print('Frente a ti hay un duende, tiene un cuchillo en una mano y un escudo en la otra.\nSe ve dispuesto a atacar.')
-            duel(player,Goblin())
-        elif vuelta==5:
+            juego.slow_print('Duelo de pistoleros al mejor de 3 rondas.\nCada ronda se inicia con una bala cada quien, selecciona tu moviento cada turno.\nObserva que el primer movimiento de cada ronda es importante para tu rival.\nPresiona enter para comenzar.')
+            input()
             pistolero.play(player)
+        elif vuelta==5:
+            juego.slow_print('Para abrir el candado trata de descifrar la clave de cuatro dígitos siguiendo las pistas después de cada intento.\nPresiona enter para comenzar.')
+            input()
+            candado.play(player,0)
         elif vuelta==6:
-            candado.play(player)
+            juego.slow_print('Trata de resolver el acertijo escribiendo tu respuesta cuando se te indique.\nPresiona enter para comenzar.')
+            input()
+            acertijos.play(player,0)
         elif vuelta==7:
-            acertijos.play(player)
+            juego.slow_print('Presiona enter antes de que la barra llegue a 0,\ntrata de esperar hasta estar lo más cerca de 0 posible.\nPresiona enter para comenzar.')
+            input()
+            valiente.play(player,0)
         elif vuelta==8:
-            valiente.play(player)
-        elif vuelta==9:
-            examen.play(player)
+            juego.slow_print('Cada pregunta introduce el inciso de la respuesta correcta.\nPresiona enter para comenzar.')
+            input()
+            examen.play(player,0)
 
         
 def cueva(player):
@@ -185,7 +210,7 @@ def cueva(player):
                 print("Puerta '{}'".format(door),end='   ')
             choice=input()
         if choice.lower()=='pistolero':
-            result=pistolero.play(player)
+            result=pistolero.play(player,1)
         elif choice.lower()=='candado':
             result=candado.play(player)
         elif choice.lower()=='acertijos':

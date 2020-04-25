@@ -36,9 +36,9 @@ def player_move(player):
     elif event==6:
         trap=random.randint(1,3)
         if trap==1:
-            trampas.run_trap(player)
+            trampas.run_trap(player,1)
         elif trap==2:
-            trampas.arrow_trap(player)
+            trampas.arrow_trap(player,1)
         else:
             trampas.voice_trap(player)
     elif event==7:

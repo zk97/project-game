@@ -53,6 +53,10 @@ class Player:
             return random.randint(1,3)
         
 def play(player1):
+    global MAX_BULL
+    MAX_BULL=5
+    if player1.gun_lvl>0:
+        MAX_BULL=player1.max_bullets
     player=Player()
     cpu=Player()
     C_WINS=0

@@ -31,8 +31,8 @@ w=["Mi ser por un punto empieza,\npor un punto ha de acabar;\nel que mi nombre a
 x=["Es una red bien tejida,\ncuyos nudos no se ven,\ny duran toda la vida.\nEn esta red de pescar,\nunos claman por salir,\ny otros claman por entrar.","matrimonio"]
 y=["Una dama muy delgada\ny de palidez mortal,\nque se alegra y reanima\ncuando la van a quemar.","vela"]
 z=["Un árbol con doce ramas,\ncada una tiene un nido,\ncada nido, siete pájaros,\ny cada cual su apellido.","año"]
-
-riddles=[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
+true_riddles=[a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z]
+riddles=[]
 
 def choose_riddle():
     rid = random.choice(riddles)
@@ -49,39 +49,60 @@ def player_guess(player,answer):
             player.magic-=50
             awsner=random.sample(answer,len(answer))
             juego.slow_print("".join(awsner))
-    juego.slow_print("¿Cuál es tu respuesta al acerijo?")
+    juego.slow_print("¿Cuál es tu respuesta al acertijo?")
     return input()
 
-def play(player):
+def play(player,tutorial):
+    global riddles
+    riddles=true_riddles
     switch=False
     op=2
     bet=0
-    juego.slow_print("¿Por qué no hacemos ésto más interesante?\nSi ganas puedo mejorar tu espada, si aún no es de nivel 3.\nPero si pierdes la cambiaré por una peor, o te daré un mordisco si no tienes una.")
-    while bet not in ['1','2']:
-        bet=input("1)Aceptas la apuesta\n2)No tienes interés")
-    ans=choose_riddle()
-    while op>0 and not switch:
-        guess=player_guess(player,ans[0])
-        for i in ans:
-            if re.search(i,guess.lower()):
-                switch=True
-        if not switch and op>1:
-            juego.slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
-            time.sleep(2)
-        elif not switch:
-            op-=1
-    if op==0:
-        juego.slow_talk('-No encontraste la respuesta al acertijo.')
-        if bet=='1':
-            if not player.sword_lvl:
-                vida=player.health
-                player.receive_damage(50,0)
-                juego.slow_print('La esfinge te suelta un mordisco que te quita {} de vida.'.format(vida-player.health))
+    if not tutorial:
+        riddles=riddles[20:]
+        ans=choose_riddle()
+        while not switch:
+            juego.slow_print("¿Cuál es tu respuesta al acertijo?\nPara ver la respuesta y salir escribe 'Salir'.")
+            guess=input()
+            if guess.lower()=='salir':
+                juego.slow_print("La respuesta era '{}'.".format(ans[0].capitalize()))
+                return None
             else:
-                player.sword_down()           
-        return 0
-    else:
+                for i in ans:
+                    if re.search(i,guess.lower()):
+                        switch=True
+                if not switch:
+                    juego.slow_talk('-¡Incorrecto!')
+                    time.sleep(1.5)
         juego.slow_talk('-Tu respuesta es correcta.')
-        if bet=='1':
-            player.sword_up()
-        return 1
+        return None
+    else:
+        juego.slow_print("¿Por qué no hacemos ésto más interesante?\nSi ganas puedo mejorar tu espada, si aún no es de nivel 3.\nPero si pierdes la cambiaré por una peor, o te daré un mordisco si no tienes una.")
+        while bet not in ['1','2']:
+            bet=input("1)Aceptas la apuesta\n2)No tienes interés")
+        ans=choose_riddle()
+        while op>0 and not switch:
+            guess=player_guess(player,ans[0])
+            for i in ans:
+                if re.search(i,guess.lower()):
+                    switch=True
+            if not switch and op>1:
+                juego.slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
+                time.sleep(2)
+            elif not switch:
+                op-=1
+        if op==0:
+            juego.slow_talk('-No encontraste la respuesta al acertijo.')
+            if bet=='1':
+                if not player.sword_lvl:
+                    vida=player.health
+                    player.receive_damage(50,0)
+                    juego.slow_print('La esfinge te suelta un mordisco que te quita {} de vida.'.format(vida-player.health))
+                else:
+                    player.sword_down()           
+            return 0
+        else:
+            juego.slow_talk('-Tu respuesta es correcta.')
+            if bet=='1':
+                player.sword_up()
+            return 1

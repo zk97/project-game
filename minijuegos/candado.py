@@ -2,17 +2,16 @@ import random
 import time
 import juego
 
-NUMBER=0
-ROUND=0
-
-
-
 def ask_player():
     answer=-1
+    set_digit=set([str(x) for x in range(10)])
     while answer not in range(0,10000) or len(list_answer)!=4:
-        juego.slow_print('¿Con qué número quieres tratar?')
-        answer=input()
-        list_answer=[x for x in answer]
+        set_answer=set('a')
+        while not set_answer.issubset(set_digit):
+            juego.slow_print('¿Con qué combinación de cuatro dígitos quieres tratar?')
+            answer=input()
+            list_answer=[x for x in answer]
+            set_answer=set(list_answer)
         answer=int(answer)
     return answer
 
@@ -46,44 +45,53 @@ def compare(guess,real):
             juego.slow_print("{} números son correctos y están en el lugar correcto.".format(right_place))
         else:
             juego.slow_print("{} números son correctos y están en el lugar correcto, {} números son correctos pero están en la posición equivocada.".format(right_place,wrong_place))
-    time.sleep(2)
+    time.sleep(1)
     
-def play(player):
+def play(player,tutorial):
     number=random.randint(0,9999)
     num_round=0
     player_guess=-1
     choice=0
-    while player_guess!=number and num_round<7:
-        player_guess=ask_player()
-        compare(player_guess,number)
-        num_round+=1
-    if player_guess!=number:
-        juego.slow_print('Te quedaste si oportunidades.')
-        if player.magic>=25:
-            while choice not in ['1','2']:
-                choice=input('¿Deseas sacrificar magia para restaurar el candado?\n1)Si\n2)No')
-            choice=int(choice)
-            if choice:
-                player.magic-=25
-                while player_guess!=number and num_round<10:
-                    player_guess=ask_player()
-                    compare(player_guess,number)
-                    num_round+=1
+    if not tutorial:
+        while player_gess!=number:
+            player_guess=ask_player()
+            compare(player_guess,number)
+        juego.slow_print('¡La clave introducida es correcta!')
+    else:
+        while player_guess!=number and num_round<7:
+            juego.slow_print('Intento #{}'.format(num_round+1))
+            player_guess=ask_player()
+            compare(player_guess,number)
+            num_round+=1
+        if player_guess!=number:
+            juego.slow_print('Parece ser que el candado dejó de funcionar es imposible meter una nueva combinación.')
+            if player.magic>=25:
+                while choice not in ['1','2']:
+                    choice=input('¿Deseas sacrificar magia para restaurar el candado un poco?\n1)Si\n2)No')
+                choice=int(choice)
+                if choice:
+                    player.magic-=25
+                    while player_guess!=number and num_round<10:
+                        juego.slow_print('Usas no se qué pero ahora que lo pienso eso no toca ahorita jeje')
+                        juego.slow_print('Intento #{}'.format(num_round+1))
+                        player_guess=ask_player()
+                        compare(player_guess,number)
+                        num_round+=1
+                else:
+                    juego.slow_print("No lograste abrir el candado.")
+                    player.receive_damage(15,0)
+                return 0
             else:
                 juego.slow_print("No lograste abrir el candado.")
                 player.receive_damage(15,0)
-            return 0
-        else:
-            juego.slow_print("No lograste abrir el candado.")
+                return 0
+        if num_round==10:
+            juego.slow_print("No lograste descifrar la combinación.")
             player.receive_damage(15,0)
             return 0
-    if num_round==10:
-        juego.slow_print("No lograste descifrar la combinación.")
-        player.receive_damage(15,0)
-        return 0
-    else:
-        juego.slow_print("El candado se abre y puedes cruzar.")
-        if num_round<7:
-            player.receive_damage(0,20)
-        return 1
+        else:
+            juego.slow_print("El candado se abre y puedes cruzar.")
+            if num_round<7:
+                player.receive_damage(0,20)
+            return 1
         

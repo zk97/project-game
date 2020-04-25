@@ -29,7 +29,7 @@ def start_game():
     scream('-HEY!')
     slow_talk('-Ven, tengo que mostrarte algo.')
     slow_print('Caminas hacia donde está tu abuelo.')
-    slow_talk('-Pronto llegará el día en que no esté y tendrás que cuidarte por tu cuenta.\n-Tengo un regalo pero tendrás que aprender a dominarlo por tu cuenta')
+    slow_talk('-Pronto llegará el día en que no esté y tendrás que cuidarte por tu cuenta.\n-Tengo un regalo para ti, pero tendrás que aprender a dominarlo por tu cuenta')
     print('.',end='\r')
     time.sleep(1)
     print("..",end="\r")
