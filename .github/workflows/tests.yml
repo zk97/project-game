@@ -24,3 +24,6 @@ jobs:
 
       - name: Display Python Version
         run: python - "import sys; print(sys.version)"
+
+      - name: Utils Tests
+        run: python -m unittest discover -s tests/unit/utils -s
