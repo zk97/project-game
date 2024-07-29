@@ -1,28 +1,8 @@
-import mapa,walk
-from characters import Warrior
+import general.mapa as mapa
+import general.walk as walk
+from general.characters import Warrior
+from utils.functions import slow_print, slow_talk, scream
 import time
-
-def slow_print(text):
-    for x in text:
-        time.sleep(0.04)
-        print(x,end='')
-    print('')
-    time.sleep(1)
-    
-        
-def slow_talk(text):
-    for x in text:
-        time.sleep(0.1)
-        print(x,end='')
-    print('')
-    time.sleep(1)
-        
-def scream(text):
-    for x in text:
-        time.sleep(0.4)
-        print(x.upper(),end='')
-    print('')
-    time.sleep(1)
 
 def start_game():
     slow_print('Otro día igual que siempre, fuera de tus sueños lo único que puedes ver son estas letras dentro de tu cabeza.')

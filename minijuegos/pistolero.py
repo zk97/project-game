@@ -1,6 +1,5 @@
-import random
-import time
-import juego
+from utils.functions import slow_print, slow_talk, scream
+import random, time
 
 BASE_BULL = 1
 MAX_BULL=5
@@ -69,7 +68,7 @@ def play(player1):
         if game_round==0:
             cpu_first=cpu.cpu_choose_move()
         time.sleep(1)
-        juego.slow_print("Inicia la ronda, cada quien tiene 1 bala cargada.")
+        slow_print("Inicia la ronda, cada quien tiene 1 bala cargada.")
         while True:
             play_move=player.player_choose_move()
             if cpu_moves==0:
@@ -81,54 +80,54 @@ def play(player1):
                 if cpu_move==1:
                     player.recharge()
                     cpu.recharge()
-                    juego.slow_print("Logras cargar tu arma y notas que tu rival hizo lo mismo.")
+                    slow_print("Logras cargar tu arma y notas que tu rival hizo lo mismo.")
                 elif cpu_move==2:
                     player.hp-=1
-                    juego.scream('¡BANG!')
-                    juego.slow_print("Sientes un dolor y calor que se extiende en tu pierna.")
+                    scream('¡BANG!')
+                    slow_print("Sientes un dolor y calor que se extiende en tu pierna.")
                     C_WINS+=1
-                    juego.slow_talk("-¿Es todo lo que tienes?")
+                    slow_talk("-¿Es todo lo que tienes?")
                     break
                 else:
                     player.recharge()
-                    juego.slow_print("En cuanto tocas tu pistola, tu rival se cubre. Tranquilamente recargas.")
+                    slow_print("En cuanto tocas tu pistola, tu rival se cubre. Tranquilamente recargas.")
             elif play_move==2:
                 if cpu_move==1:
                     cpu.hp-=1
                     a=[1,2,3]
                     a.remove(cpu_first)
                     cpu_first=random.choice(a)
-                    juego.scream('¡BANG!')
-                    juego.slow_print("Agarras a tu enemigo tratando de recargar y das en el blanco.")
+                    scream('¡BANG!')
+                    slow_print("Agarras a tu enemigo tratando de recargar y das en el blanco.")
                     P_WINS+=1
-                    juego.slow_talk("-¡¡No puedo creer que me diste!!")
+                    slow_talk("-¡¡No puedo creer que me diste!!")
                     break
                 elif cpu_move==2:
                     player.shoot()
                     cpu.shoot()
-                    juego.scream('¡¡BANG!!')
-                    juego.slow_print("Ambos disparan a la vez y las balas chocan entre si.")
+                    scream('¡¡BANG!!')
+                    slow_print("Ambos disparan a la vez y las balas chocan entre si.")
                 else:
                     player.shoot()
-                    juego.scream("Bang")
-                    juego.slow_print("Justo antes de jalar el gatillo ves como tu enemigo alcanza a cubrirse, una bala desperdiciada")
+                    scream("Bang")
+                    slow_print("Justo antes de jalar el gatillo ves como tu enemigo alcanza a cubrirse, una bala desperdiciada")
             else:
                 if cpu_move==1:
                     cpu.recharge
-                    juego.slow_print("Te apresuras a cubrirte pero tu enemigo aprovecha esta oportunidad para recargar.")
+                    slow_print("Te apresuras a cubrirte pero tu enemigo aprovecha esta oportunidad para recargar.")
                 elif cpu_move==2:
                     cpu.shoot()
-                    juego.scream('Bang')
-                    juego.slow_print("Excelentes reflejos! Logras evitar que esa bala diera en el blanco")
+                    scream('Bang')
+                    slow_print("Excelentes reflejos! Logras evitar que esa bala diera en el blanco")
                 else:
-                    juego.scream("...")
-                    juego.slow_print("Se miran fijamente ambos protegiendose")
+                    scream("...")
+                    slow_print("Se miran fijamente ambos protegiendose")
         game_round+=1
     if P_WINS==2:
-        juego.slow_print('Sales airoso de este enfrentamiento.')
+        slow_print('Sales airoso de este enfrentamiento.')
         player1.gun_up()
         return 1
     else:
-        juego.slow_print('Fuiste derrotado.')
+        slow_print('Fuiste derrotado.')
         player1.gun_down()
         return 0

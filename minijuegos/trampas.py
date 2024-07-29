@@ -1,8 +1,5 @@
-import random
-import time
-import threading
-import signal
-import juego
+from utils.functions import slow_print, slow_talk, scream
+import random, time, threading, signal
 
 
 stop_threads=False
@@ -54,11 +51,11 @@ def run_trap(player,tutorial):
     run = True
     stop_threads=False
     switch=False
-    juego.scream('PELIGRO')
+    scream('PELIGRO')
     time.sleep(1)
-    juego.slow_print('Algo se aproxima...')
+    slow_print('Algo se aproxima...')
     time.sleep(1)
-    juego.scream('CORRE')
+    scream('CORRE')
     t1 = threading.Thread(target=count_space,args=(dist,))
     t2 = threading.Thread(target=goblins)
 
@@ -70,17 +67,17 @@ def run_trap(player,tutorial):
     print('')
     if not tutorial:
         if run:
-            juego.slow_print('Corriste lo suficientemente rápido.')
+            slow_print('Corriste lo suficientemente rápido.')
         else:
-            juego.slow_print('Necesitas ser más veloz, no llegaste a tiempo.')
+            slow_print('Necesitas ser más veloz, no llegaste a tiempo.')
     else:
         if run:
-            juego.slow_print('Lograste escapar de esta, que pesados son los duentes.')
+            slow_print('Lograste escapar de esta, que pesados son los duentes.')
         else:
-            juego.slow_print('Los dejas atrás pero te de das cuenta del daño que te hicieron.')
+            slow_print('Los dejas atrás pero te de das cuenta del daño que te hicieron.')
             vida=player.health
             player.receive_damage(50,0)
-            juego.slow_print('Perdiste {} de vida'.format(vida-player.health))
+            slow_print('Perdiste {} de vida'.format(vida-player.health))
 
 # Arrows!
     
@@ -132,7 +129,7 @@ def arrow_trap(player,tutorial):
         tempo=2
     else:
         tempo=1
-    juego.scream('CUIDADO')
+    scream('CUIDADO')
     time.sleep(2)
     t1 = threading.Thread(target=player_moves)
     t2 = threading.Thread(target=dodge_trap,args=(tempo,))
@@ -141,26 +138,26 @@ def arrow_trap(player,tutorial):
     t2.join()
     print('Presiona enter para continuar')
     t1.join()
-    juego.slow_print("Te pegaron {} piedras!".format(damage))
+    slow_print("Te pegaron {} piedras!".format(damage))
     if tutorial:
         if damage >=1:
-            juego.slow_print('Perdiste {} de vida'.format(10*damage - player.shield_lvl*3))
+            slow_print('Perdiste {} de vida'.format(10*damage - player.shield_lvl*3))
             player.receive_damage(10*damage,player.shield_lvl*3)
         else:
-            juego.slow_print('Lograste salir ileso, que molestos son esos duendes.')
+            slow_print('Lograste salir ileso, que molestos son esos duendes.')
     
 # Decide!
 
 def voice_trap(player):
     choice=False
-    juego.slow_print('Vas caminando cuando escuchas una voz que te habla...')
-    juego.slow_talk('FRENTE A TI ENCONTRARÁS UN REGALO, TÓMALO')
+    slow_print('Vas caminando cuando escuchas una voz que te habla...')
+    slow_talk('FRENTE A TI ENCONTRARÁS UN REGALO, TÓMALO')
     time.sleep(2)
-    juego.slow_print('La voz sonaba un poco sospechosa...')
+    slow_print('La voz sonaba un poco sospechosa...')
     while choice not in ['1','2']:
         choice = input('Decide:\n1)Mejor continuar tu camino\n2)Tomar regalo')
     if choice=='1':
-        juego.slow_print('Continuas tu camino ignorando la voz.')
+        slow_print('Continuas tu camino ignorando la voz.')
     else:
         print(".",end="\r")
         time.sleep(1)
@@ -170,17 +167,17 @@ def voice_trap(player):
         time.sleep(1)
         luck=random.randint(1,5)
         if luck==5:
-            juego.slow_print('Encuentras una posión de vida y decides beberla.')
+            slow_print('Encuentras una posión de vida y decides beberla.')
             vida=player.health
             player.receive_damage(0,30)
             if vida < player.health:
-                juego.slow_print('Has ganado {} de vida.'.format(player.health-vida))
+                slow_print('Has ganado {} de vida.'.format(player.health-vida))
             else:
-                juego.slow_print('Nada sucede.')
+                slow_print('Nada sucede.')
         else:
-            juego.slow_print('Encuentras una posión de vida y decides beberla.')
-            juego.slow_print('Inmediatamente te das cuenta que cometiste un error.')
+            slow_print('Encuentras una posión de vida y decides beberla.')
+            slow_print('Inmediatamente te das cuenta que cometiste un error.')
             vida=player.health
             player.receive_damage(10,0)
-            juego.slow_print('Pierdes {} de vida'.format(vida-player.health))
+            slow_print('Pierdes {} de vida'.format(vida-player.health))
             

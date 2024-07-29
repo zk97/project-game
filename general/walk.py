@@ -1,9 +1,8 @@
-import mapa,duelos
-from characters import Warrior,Goblin
-import sys,random
-sys.path.append('..')
+import general.mapa as mapa
+import general.duelos as duelos
+from general. characters import Warrior,Goblin
 from minijuegos import acertijos,candado,examen,pistolero,trampas,valiente
-
+import random
 
 #8 nada,7miniduelo,6trampa,5objetoaleatorio,4,bloqueado,3,cueva,2tienda,1coliseo,0base        
 

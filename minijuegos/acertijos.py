@@ -1,7 +1,6 @@
-import random
-import time
-import re
-import juego
+from utils.functions import slow_print, slow_talk
+import random, time, re
+
 
 #List of riddles with answers
 a=["¿Qué ser camina con cuatro patas al alba, dos patas al mediodía y tres patas al atardecer?","hombre"]
@@ -36,20 +35,20 @@ riddles=[]
 
 def choose_riddle():
     rid = random.choice(riddles)
-    juego.slow_print(rid[0])
+    slow_print(rid[0])
     return rid[1:]
 
 def player_guess(player,answer):
     choice=False
     if player.magic>=50:
-        juego.slow_print('Por 50 de magia puedes tratar de leer la mente de la esfinge si no sabes la respuesta.')
+        slow_print('Por 50 de magia puedes tratar de leer la mente de la esfinge si no sabes la respuesta.')
         while choice not in ['a','b']:
             choice=input("a)Contestar\nb)Leer mente")
         if choice=='b':
             player.magic-=50
             awsner=random.sample(answer,len(answer))
-            juego.slow_print("".join(awsner))
-    juego.slow_print("¿Cuál es tu respuesta al acertijo?")
+            slow_print("".join(awsner))
+    slow_print("¿Cuál es tu respuesta al acertijo?")
     return input()
 
 def play(player,tutorial):
@@ -62,22 +61,22 @@ def play(player,tutorial):
         riddles=riddles[20:]
         ans=choose_riddle()
         while not switch:
-            juego.slow_print("¿Cuál es tu respuesta al acertijo?\nPara ver la respuesta y salir escribe 'Salir'.")
+            slow_print("¿Cuál es tu respuesta al acertijo?\nPara ver la respuesta y salir escribe 'Salir'.")
             guess=input()
             if guess.lower()=='salir':
-                juego.slow_print("La respuesta era '{}'.".format(ans[0].capitalize()))
+                slow_print("La respuesta era '{}'.".format(ans[0].capitalize()))
                 return None
             else:
                 for i in ans:
                     if re.search(i,guess.lower()):
                         switch=True
                 if not switch:
-                    juego.slow_talk('-¡Incorrecto!')
+                    slow_talk('-¡Incorrecto!')
                     time.sleep(1.5)
-        juego.slow_talk('-Tu respuesta es correcta.')
+        slow_talk('-Tu respuesta es correcta.')
         return None
     else:
-        juego.slow_print("¿Por qué no hacemos ésto más interesante?\nSi ganas puedo mejorar tu espada, si aún no es de nivel 3.\nPero si pierdes la cambiaré por una peor, o te daré un mordisco si no tienes una.")
+        slow_print("¿Por qué no hacemos ésto más interesante?\nSi ganas puedo mejorar tu espada, si aún no es de nivel 3.\nPero si pierdes la cambiaré por una peor, o te daré un mordisco si no tienes una.")
         while bet not in ['1','2']:
             bet=input("1)Aceptas la apuesta\n2)No tienes interés")
         ans=choose_riddle()
@@ -87,22 +86,22 @@ def play(player,tutorial):
                 if re.search(i,guess.lower()):
                     switch=True
             if not switch and op>1:
-                juego.slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
+                slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
                 time.sleep(2)
             elif not switch:
                 op-=1
         if op==0:
-            juego.slow_talk('-No encontraste la respuesta al acertijo.')
+            slow_talk('-No encontraste la respuesta al acertijo.')
             if bet=='1':
                 if not player.sword_lvl:
                     vida=player.health
                     player.receive_damage(50,0)
-                    juego.slow_print('La esfinge te suelta un mordisco que te quita {} de vida.'.format(vida-player.health))
+                    slow_print('La esfinge te suelta un mordisco que te quita {} de vida.'.format(vida-player.health))
                 else:
                     player.sword_down()           
             return 0
         else:
-            juego.slow_talk('-Tu respuesta es correcta.')
+            slow_talk('-Tu respuesta es correcta.')
             if bet=='1':
                 player.sword_up()
             return 1

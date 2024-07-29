@@ -1,6 +1,5 @@
-import time
-import random
-import juego
+from utils.functions import slow_print, slow_talk, scream
+import time, random
 
 turn=5
 group=1
@@ -61,7 +60,7 @@ def play(player,tutorial):
             ask=get_question(q1)[0]
             mix_choice()
             ordered_options=sorted([choice[i]+ask[i+1] for i in range(4)])
-            juego.slow_print('{}.-{}'.format(6-turn,ask[0]))
+            slow_print('{}.-{}'.format(6-turn,ask[0]))
             time.sleep(1)
             for x in ordered_options:
                 print(x,end='\r')
@@ -69,12 +68,12 @@ def play(player,tutorial):
             while player_choice not in choice:
                 player_choice=input()+')'
             if player_choice==choice[0]:
-                juego.slow_print('Respuesta correcta.')
+                slow_print('Respuesta correcta.')
                 group+=1
             else:
-                juego.scream('Incorrecto')
+                scream('Incorrecto')
             turn-=1
-        juego.slow_print('Tiviste {} respuestas correctas'.format(group-1))
+        slow_print('Tiviste {} respuestas correctas'.format(group-1))
     else:
         while turn>0:
             player_choice=''
@@ -90,7 +89,7 @@ def play(player,tutorial):
                 ask=get_question(q5)[0]
             mix_choice()
             ordered_options=sorted([choice[i]+ask[i+1] for i in range(4)])
-            juego.slow_print('{}.-{}'.format(6-turn,ask[0]))
+            slow_print('{}.-{}'.format(6-turn,ask[0]))
             time.sleep(1)
             for x in ordered_options:
                 print(x,end='\r')
@@ -98,20 +97,20 @@ def play(player,tutorial):
             while player_choice not in choice:
                 player_choice=input()+')'
             if player_choice==choice[0]:
-                juego.slow_print('Respuesta correcta.')
+                slow_print('Respuesta correcta.')
                 group+=1
             else:
-                juego.scream('Incorrecto')
+                scream('Incorrecto')
             turn-=1
-        juego.slow_print('Tiviste {} respuestas correctas'.format(group-1))
+        slow_print('Tiviste {} respuestas correctas'.format(group-1))
         if group>4:
             if group>5:
-                juego.slow_talk('-Me pusiste de buen humor, mejoraré todos tus objetos')
+                slow_talk('-Me pusiste de buen humor, mejoraré todos tus objetos')
                 player.shield_up()
                 player.sword_up()
                 player.gun_up()
             else:
-                juego.slow_talk('Casi logras tener 5 respuestas correctas. ¿Qué objeto quieres que mejore para ti?')
+                slow_talk('Casi logras tener 5 respuestas correctas. ¿Qué objeto quieres que mejore para ti?')
                 cosas=[]
                 if player.sword_lvl<3:
                     cosas.append('Espada')
@@ -133,20 +132,20 @@ def play(player,tutorial):
                 elif cosa=='Escudo':
                     player.shield_up()
                 else:
-                    juego.slow_talk('-Veo que ya tienes todo mejorado al máximo, tal vez para la otra.')
+                    slow_talk('-Veo que ya tienes todo mejorado al máximo, tal vez para la otra.')
             return 1
         else:
             if group>1:
                 vida = player.health
                 player.receive_damage(20,0)
-                juego.slow_talk('-Me haces enfurecer con tu poco conocimiento.')
-                juego.slow_print('Te dispara una flecha al estomago.\nPierdes {} de vida.'.format(vida-player.health))
+                slow_talk('-Me haces enfurecer con tu poco conocimiento.')
+                slow_print('Te dispara una flecha al estomago.\nPierdes {} de vida.'.format(vida-player.health))
                 if player.magic>=30:
                     player.magic-=30
                 else:
                     player.magic=0
             else:
-                juego.slow_talk('-Eres tan inculto que pierdes todos tus objetos.')
+                slow_talk('-Eres tan inculto que pierdes todos tus objetos.')
                 for _ in range(3):
                     player.shield_down()
                     player.sword_down()
