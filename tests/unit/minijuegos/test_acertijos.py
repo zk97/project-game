@@ -76,6 +76,7 @@ class TestPlay(unittest.TestCase):
 
     @patch('src.minijuegos.acertijos.player_guess', Mock())
     @patch('src.minijuegos.acertijos.load_riddles', Mock())
+    @patch('src.minijuegos.acertijos.time.sleep', Mock())
     @patch('src.minijuegos.acertijos.choose_riddle')
     @patch('src.minijuegos.acertijos.slow_talk')
     @patch('src.minijuegos.acertijos.slow_print')
