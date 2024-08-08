@@ -31,19 +31,19 @@ def play(player, tutorial):
     switch = False
     op = 2
     bet = 0
-    if not tutorial:
+    if tutorial:
         riddles = load_riddles('riddles_tutorial.json')
         rid, ans = choose_riddle(riddles)
         slow_print(rid)
         while not switch:
             slow_print("¿Cuál es tu respuesta al acertijo?\nPara ver la respuesta y salir escribe 'Salir'.")
-            guess = input()
-            if guess.lower() == 'salir':
-                slow_print("La respuesta era '{}'.".format(ans[0].capitalize()))
+            guess = input().lower()
+            if guess == 'salir':
+                slow_print(f"La respuesta era '{ans[0]}'.")
                 return None
             else:
                 for i in ans:
-                    if re.search(i, guess.lower()):
+                    if re.search(i, guess):
                         switch = True
                 if not switch:
                     slow_talk('-¡Incorrecto!')
@@ -60,15 +60,15 @@ def play(player, tutorial):
         slow_print(rid)
         while op > 0 and not switch:
             player_guess(player, ans[0])
-            guess = input()
+            guess = input().lower()
             for i in ans:
-                if re.search(i, guess.lower()):
+                if re.search(i, guess):
                     switch = True
-            if not switch and op > 1:
-                slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
-                time.sleep(2)
-            elif not switch:
+            if not switch:
                 op -= 1
+                if op > 0:
+                    slow_talk('-¡Incorrecto! Te queda sólo una oportunidad.')
+                    time.sleep(2)
         if op == 0:
             slow_talk('-No encontraste la respuesta al acertijo.')
             if bet == '1':

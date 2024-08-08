@@ -181,19 +181,19 @@ def tutorial():
         elif vuelta==5:
             slow_print('Para abrir el candado trata de descifrar la clave de cuatro dígitos siguiendo las pistas después de cada intento.\nPresiona enter para comenzar.')
             input()
-            candado.play(player,0)
+            candado.play(player,1)
         elif vuelta==6:
             slow_print('Trata de resolver el acertijo escribiendo tu respuesta cuando se te indique.\nPresiona enter para comenzar.')
             input()
-            acertijos.play(player,0)
+            acertijos.play(player,1)
         elif vuelta==7:
             slow_print('Presiona enter antes de que la barra llegue a 0,\ntrata de esperar hasta estar lo más cerca de 0 posible.\nPresiona enter para comenzar.')
             input()
-            valiente.play(player,0)
+            valiente.play(player,1)
         elif vuelta==8:
             slow_print('Cada pregunta introduce el inciso de la respuesta correcta.\nPresiona enter para comenzar.')
             input()
-            examen.play(player,0)
+            examen.play(player,1)
 
         
 def cueva(player):
