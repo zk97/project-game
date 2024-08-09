@@ -10,6 +10,8 @@ DAPT CDMX March 2020
 - [Workflow](#workflow) 
 - [Organization](#organization) 
 - [Links](#links)
+- [Tools](#tools)
+- [ToDo](#todo)
 
 <a name="introduction"></a>
 
@@ -37,3 +39,15 @@ I used trello to organize and wrote all my ideas about the game before coding.
 ## Links
 [Trello board](https://trello.com/b/zimsbcXk/juego-ironhack)
 [Flowchart](https://whimsical.com/2s84irQrspHxeoin6rvbj4)
+
+<a name="tools"></a>
+
+## Tools
+- Multithreading
+- Unittest
+- GitHub Actions
+
+<a name="todo"></a>
+
+## To Do
+- Update Candado magic use text
