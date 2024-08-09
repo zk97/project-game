@@ -1,13 +1,13 @@
 name: Game Tests
 
-on: [push]
+on: [ push ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.10"]
+        python-version: [ "3.11", "3.10" ]
 
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +26,14 @@ jobs:
         run: python - "import sys; print(sys.version)"
 
       - name: Utils Tests
-        run: python -m unittest discover -s tests/unit/utils -v
+        run: |
+          echo "Runing utils unit tests"
+          python -m unittest tests/unit/utils/test_functions.py -v
 
       - name: Minijuegos Tests
-        run: python -m unittest discover -s tests/unit/minijuegos -v
-
+        run: |
+          echo "Runing acertijos unit tests"
+          python -m unittest tests/unit/minijuegos/test_acertijos.py -v
+          echo "Runing candado unit tests"
+          python -m unittest tests/unit/minijuegos/test_candado.py -v
+        
