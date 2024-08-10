@@ -38,4 +38,6 @@ jobs:
           python -m unittest tests/unit/minijuegos/test_candado.py -v
           echo "Runing examen unit tests"
           python -m unittest tests/unit/minijuegos/test_examen.py -v
+          echo "Runing pistolero unit tests"
+          python -m unittest tests/unit/minijuegos/test_pistolero.py -v
         
