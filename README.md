@@ -51,3 +51,4 @@ I used trello to organize and wrote all my ideas about the game before coding.
 
 ## To Do
 - Update Candado magic use text
+- Update magic damage function from Examen minigame
