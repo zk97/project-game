@@ -2,13 +2,11 @@ from src.utils.functions import slow_print, slow_talk, scream
 import random
 import time
 
-MAX_BULL = 5
-
 
 class Player:
-    def __init__(self):
+    def __init__(self, max_bullets=5):
+        self.max_bullets = max_bullets
         self.bullets = 1
-        self.max_bullets = 5
         self.hp = 2
         self.opciones = {}
 
@@ -46,84 +44,79 @@ class Player:
         return random.choice(list(self.opciones.keys()))
 
 
-def play(player1):
-    global MAX_BULL
-    MAX_BULL = 5
-    if player1.gun_lvl > 0:
-        MAX_BULL = player1.max_bullets
-    player = Player()
+def play(gen_player):
+    if gen_player.gun_lvl > 0:
+        player = Player(gen_player.max_bullets)
+    else:
+        player = Player()
+
     cpu = Player()
-    C_WINS = 0
-    P_WINS = 0
-    game_round = 0
-    while P_WINS != 2 and C_WINS != 2:
-        cpu_moves = 0
+    cpu_first_move = 0
+    starting_game = True
+
+    while player.hp > 0 and cpu.hp > 0:
+        starting_round = True
         player.bullets = 1
         cpu.bullets = 1
-        if game_round == 0:
-            cpu_first = cpu.cpu_choose_move()
         time.sleep(1)
         slow_print("Inicia la ronda, cada quien tiene 1 bala cargada.")
         while True:
             play_move = player.player_choose_move()
-            if cpu_moves == 0:
-                cpu_move = cpu_first
-                cpu_moves += 1
-            else:
-                cpu_move = cpu.cpu_choose_move()
-            if play_move == 1:
-                if cpu_move == 1:
+            cpu_move = cpu.cpu_choose_move()
+            if starting_round:
+                starting_round = False
+                if starting_game:
+                    cpu_first_move = cpu_move
+                    starting_game = False
+                else:
+                    opciones_limitadas = [1, 2, 3]
+                    opciones_limitadas.remove(cpu_first_move)
+                    cpu_move = random.choice(opciones_limitadas)
+            match (player.opciones[play_move], cpu.opciones[cpu_move]):
+                case ('Me cubro', 'Me cubro'):
+                    scream("...")
+                    slow_print("Se miran fijamente ambos protegiendose")
+                case ('Me cubro', 'Recargo'):
+                    cpu.recharge()
+                    slow_print("Te apresuras a cubrirte pero tu enemigo aprovecha esta oportunidad para recargar.")
+                case ('Me cubro', 'Disparo'):
+                    cpu.shoot()
+                    scream('Bang')
+                    slow_print("Excelentes reflejos! Logras evitar que esa bala diera en el blanco")
+                case ('Recargo', 'Me cubro'):
+                    player.recharge()
+                    slow_print("En cuanto tocas tu pistola, tu rival se cubre. Tranquilamente recargas.")
+                case ('Recargo', 'Recargo'):
                     player.recharge()
                     cpu.recharge()
                     slow_print("Logras cargar tu arma y notas que tu rival hizo lo mismo.")
-                elif cpu_move == 2:
+                case ('Recargo', 'Disparo'):
                     player.hp -= 1
                     scream('¡BANG!')
                     slow_print("Sientes un dolor y calor que se extiende en tu pierna.")
-                    C_WINS += 1
                     slow_talk("-¿Es todo lo que tienes?")
                     break
-                else:
-                    player.recharge()
-                    slow_print("En cuanto tocas tu pistola, tu rival se cubre. Tranquilamente recargas.")
-            elif play_move == 2:
-                if cpu_move == 1:
-                    cpu.hp -= 1
-                    a = [1, 2, 3]
-                    a.remove(cpu_first)
-                    cpu_first = random.choice(a)
-                    scream('¡BANG!')
-                    slow_print("Agarras a tu enemigo tratando de recargar y das en el blanco.")
-                    P_WINS += 1
-                    slow_talk("-¡¡No puedo creer que me diste!!")
-                    break
-                elif cpu_move == 2:
-                    player.shoot()
-                    cpu.shoot()
-                    scream('¡¡BANG!!')
-                    slow_print("Ambos disparan a la vez y las balas chocan entre si.")
-                else:
+                case ('Disparo', 'Me cubro'):
                     player.shoot()
                     scream("Bang")
                     slow_print(
                         "Justo antes de jalar el gatillo ves como tu enemigo alcanza a cubrirse, una bala desperdiciada")
-            else:
-                if cpu_move == 1:
-                    cpu.recharge
-                    slow_print("Te apresuras a cubrirte pero tu enemigo aprovecha esta oportunidad para recargar.")
-                elif cpu_move == 2:
+                case ('Disparo', 'Recargo'):
+                    cpu.hp -= 1
+                    scream('¡BANG!')
+                    slow_print("Agarras a tu enemigo tratando de recargar y das en el blanco.")
+                    slow_talk("-¡¡No puedo creer que me diste!!")
+                    break
+                case ('Disparo', 'Disparo'):
+                    player.shoot()
                     cpu.shoot()
-                    scream('Bang')
-                    slow_print("Excelentes reflejos! Logras evitar que esa bala diera en el blanco")
-                else:
-                    scream("...")
-                    slow_print("Se miran fijamente ambos protegiendose")
-        game_round += 1
-    if P_WINS == 2:
+                    scream('¡¡BANG!!')
+                    slow_print("Ambos disparan a la vez y las balas chocan entre si.")
+    if player.hp > 0:
         slow_print('Sales airoso de este enfrentamiento.')
-        player1.gun_up()
+        gen_player.gun_up()
         return 1
     else:
         slow_print('Fuiste derrotado.')
-        player1.gun_down()
+        gen_player.gun_down()
         return 0
