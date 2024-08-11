@@ -59,12 +59,7 @@ class TestMixExamen(unittest.TestCase):
 class TestModifyExamen(unittest.TestCase):
 
     def setUp(self):
-        self.player = Mock()
-        self.player.health = 20
-        self.player.magic = 28
-        self.player.sword_lvl = 2
-        self.player.gun_lvl = 2
-        self.player.shield_lvl = 2
+        self.player = Mock(health=20, magic=28, sword_lvl=2, gun_lvl=2, shield_lvl=2)
 
     def test_modify_group1(self, mock_talk):
         result = examen.modify_objects(self.player, 1)

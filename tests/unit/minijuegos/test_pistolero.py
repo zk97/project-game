@@ -212,7 +212,7 @@ class TestPlayPistolero(unittest.TestCase):
         self.mock_in_cpu.recharge.asssert_not_called()
         self.mock_in_cpu.shoot.assert_called_once()
         self.assertEqual(result, 1)
-        
+
 
 if __name__ == '__main__':
     unittest.main()

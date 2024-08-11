@@ -32,7 +32,7 @@ class TestChooseAcertijos(unittest.TestCase):
 class TestPlayerGuessAcertijos(unittest.TestCase):
 
     def setUp(self):
-        self.mock_player = Mock()
+        self.mock_player = Mock(magic=51)
 
     def test_low_magic(self, mock_input, mock_print):
         self.mock_player.magic = 40
@@ -43,7 +43,6 @@ class TestPlayerGuessAcertijos(unittest.TestCase):
 
     def test_high_magic_reject(self, mock_input, mock_print):
         mock_input.return_value = 'a'
-        self.mock_player.magic = 51
         acertijos.player_guess(self.mock_player, 'respuesta')
         mock_input.assert_called_once()
         self.assertEqual(mock_print.call_count, 2)
@@ -51,7 +50,6 @@ class TestPlayerGuessAcertijos(unittest.TestCase):
 
     def test_high_magic_reject_second(self, mock_input, mock_print):
         mock_input.side_effect = ['j', 'a']
-        self.mock_player.magic = 51
         acertijos.player_guess(self.mock_player, 'respuesta')
         self.assertEqual(mock_input.call_count, 2)
         self.assertEqual(mock_print.call_count, 2)
@@ -59,7 +57,6 @@ class TestPlayerGuessAcertijos(unittest.TestCase):
 
     def test_high_magic_accept_second(self, mock_input, mock_print):
         mock_input.side_effect = ['j', 'b']
-        self.mock_player.magic = 51
         acertijos.player_guess(self.mock_player, 'respuesta')
         mock_print.assert_any_call('respuesta')
         self.assertEqual(mock_input.call_count, 2)

@@ -71,7 +71,7 @@ class TestCompareCandado(unittest.TestCase):
 class TestPlayCandado(unittest.TestCase):
 
     def setUp(self):
-        self.mock_player = Mock()
+        self.mock_player = Mock(magic=30)
 
     def test_tutorial_success_third(self, mock_ask, mock_print):
         mock_ask.side_effect = ['0213', '1124', '0345', '2291']
@@ -101,7 +101,6 @@ class TestPlayCandado(unittest.TestCase):
 
     @patch('src.minijuegos.candado.input')
     def test_real_fail_high_magic_reject_second(self, mock_input, mock_ask, mock_print):
-        self.mock_player.magic = 30
         mock_ask.side_effect = ['0000' for _ in range(10)]
         mock_input.side_effect = ['a', '2']
         result = candado.play(self.mock_player, False)
@@ -113,7 +112,6 @@ class TestPlayCandado(unittest.TestCase):
 
     @patch('src.minijuegos.candado.input')
     def test_real_fail_high_magic_accept_first_fail(self, mock_input, mock_ask, mock_print):
-        self.mock_player.magic = 30
         mock_ask.side_effect = ['0000' for _ in range(10)]
         mock_input.side_effect = ['1']
         result = candado.play(self.mock_player, False)
@@ -126,7 +124,6 @@ class TestPlayCandado(unittest.TestCase):
 
     @patch('src.minijuegos.candado.input')
     def test_real_fail_high_magic_accept_first_success(self, mock_input, mock_ask, mock_print):
-        self.mock_player.magic = 30
         mock_ask.side_effect = ['0000' for _ in range(8)] + ['0345']
         mock_input.side_effect = ['1']
         result = candado.play(self.mock_player, False)
