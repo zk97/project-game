@@ -153,11 +153,13 @@ def tutorial():
         if vuelta==1:
             slow_print('Usa a,s,d,w para moverte cuando veas <,v,>,^ respectivamente.\n Presiona enter para comenzar.')
             input()
-            trampas.arrow_trap(player,0)
+            trampa = trampas.Trampas()
+            trampa.arrow_trap(player,1)
         elif vuelta==2:
             slow_print('Presiona barra espaciadora seguido de enter para correr tan rápido como puedas, trata de llegar a la meta antes de que se termine tu tiempo.\nPresiona enter para comenzar.')
             input()
-            trampas.run_trap(player,0)
+            trampa = trampas.Trampas()
+            trampa.run_trap(player,1)
         elif vuelta==3:
             slow_print('Escribe el comando que deseas usar de entre las opciones disponibles para pelear.\nPara una explicación de cada comando escribe "help", o presiona enter para comenzar.')
             ayuda='ayuda'
