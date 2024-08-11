@@ -5,6 +5,9 @@ import time
 
 class Player:
     def __init__(self, max_bullets=5):
+        self.cpu_first_move = 0
+        self.start_game = True
+        self.start_round = True
         self.max_bullets = max_bullets
         self.bullets = 1
         self.hp = 2
@@ -39,39 +42,41 @@ class Player:
 
         return play_move
 
-    def cpu_choose_move(self):
+    def cpu_choose_move(self, tutorial):
+
         self.get_move_options()
-        return random.choice(list(self.opciones.keys()))
+        cpu_move = random.choice(list(self.opciones.keys()))
+        if self.start_round:
+            self.start_round = False
+            if self.start_game:
+                self.cpu_first_move = cpu_move
+                self.start_game = False
+            elif not self.start_round and not tutorial:
+                opciones_limitadas = [1, 2, 3]
+                opciones_limitadas.remove(self.cpu_first_move)
+                cpu_move = random.choice(opciones_limitadas)
+            else:
+                cpu_move = self.cpu_first_move
+        return cpu_move
 
 
-def play(gen_player):
+def play(gen_player, tutorial):
     if gen_player.gun_lvl > 0:
         player = Player(gen_player.max_bullets)
     else:
         player = Player()
 
     cpu = Player()
-    cpu_first_move = 0
-    starting_game = True
 
     while player.hp > 0 and cpu.hp > 0:
-        starting_round = True
+        cpu.start_round = True
         player.bullets = 1
         cpu.bullets = 1
         time.sleep(1)
         slow_print("Inicia la ronda, cada quien tiene 1 bala cargada.")
         while True:
             play_move = player.player_choose_move()
-            cpu_move = cpu.cpu_choose_move()
-            if starting_round:
-                starting_round = False
-                if starting_game:
-                    cpu_first_move = cpu_move
-                    starting_game = False
-                else:
-                    opciones_limitadas = [1, 2, 3]
-                    opciones_limitadas.remove(cpu_first_move)
-                    cpu_move = random.choice(opciones_limitadas)
+            cpu_move = cpu.cpu_choose_move(tutorial)
             match (player.opciones[play_move], cpu.opciones[cpu_move]):
                 case ('Me cubro', 'Me cubro'):
                     scream("...")

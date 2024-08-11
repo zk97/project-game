@@ -177,7 +177,7 @@ def tutorial():
         elif vuelta==4:
             slow_print('Duelo de pistoleros al mejor de 3 rondas.\nCada ronda se inicia con una bala cada quien, selecciona tu moviento cada turno.\nObserva que el primer movimiento de cada ronda es importante para tu rival.\nPresiona enter para comenzar.')
             input()
-            pistolero.play(player)
+            pistolero.play(player,1)
         elif vuelta==5:
             slow_print('Para abrir el candado trata de descifrar la clave de cuatro dígitos siguiendo las pistas después de cada intento.\nPresiona enter para comenzar.')
             input()
@@ -209,7 +209,7 @@ def cueva(player):
                 print("Puerta '{}'".format(door),end='   ')
             choice=input()
         if choice.lower()=='pistolero':
-            result=pistolero.play(player,1)
+            result=pistolero.play(player)
         elif choice.lower()=='candado':
             result=candado.play(player)
         elif choice.lower()=='acertijos':
