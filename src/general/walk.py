@@ -34,12 +34,13 @@ def player_move(player):
             player.find_pot()
     elif event==6:
         trap=random.randint(1,3)
+        trampa = trampas.Trampas()
         if trap==1:
-            trampas.run_trap(player,1)
+            trampa.run_trap(player,0)
         elif trap==2:
-            trampas.arrow_trap(player,1)
+            trampa.arrow_trap(player,0)
         else:
-            trampas.voice_trap(player)
+            trampa.voice_trap(player)
     elif event==7:
         duelos.duel(player,Goblin())
     elif event==8:

@@ -1,6 +1,6 @@
 import unittest
 import src.utils.functions as functions
-from unittest.mock import patch, call, Mock
+from unittest.mock import patch, call
 
 
 @patch('src.utils.functions.sys.stdout.write')
